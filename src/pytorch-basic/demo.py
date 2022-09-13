@@ -149,6 +149,41 @@ class Pytorch_test():
         '''
         print(out1)
         
+        
+    def reshape_func(self):
+        a = torch.rand(2, 3)
+        '''
+        tensor([[0.0409, 0.1789, 0.1462],
+                [0.1220, 0.3632, 0.8985]])
+        '''
+        print(a)
+        out = torch.reshape(a, (3, 2))
+        '''
+        tensor([[0.0409, 0.1789],
+                [0.1462, 0.1220],
+                [0.3632, 0.8985]])
+        '''
+        print(out)
+        out1 = torch.reshape(a, (1, -1))
+        '''tensor([[0.0409, 0.1789, 0.1462, 0.1220, 0.3632, 0.8985]])'''
+        print(out1)
+        
+    def numpy_to_torch(self):
+        a = np.zeros([2, 3])
+        out = torch.from_numpy(a)
+        print(out)
+        
+    def cv_torch(self):
+        data = cv2.imread('C:\\01-ahmatjan\\02-code\\01-cv-related\\CV-Basic\src\\pytorch-basic\\test.jpg')
+        print(data)
+        cv2.imshow('test', data)
+        cv2.waitKey(0)
+        out = torch.from_numpy(data)
+        # torch.Size([1747, 983, 3])
+        print(out.shape)
+        
+        
+        
 test = Pytorch_test()
 # test._test_rand()
 # test.clamp_test()
@@ -157,5 +192,8 @@ test = Pytorch_test()
 # test.masked_select()
 # test.concatinate_tensor()
 # test.chunk_func()
-test.split_func()
+# test.split_func()
+# test.reshape_func()
+# test.numpy_to_torch()
+test.cv_torch()
         

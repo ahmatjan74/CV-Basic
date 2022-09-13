@@ -6,6 +6,8 @@ import torch.utils.data as data_util
 
 from cnn import CNN
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
 # data
 train_data = datasets.MNIST(root='mnist',
                             train=True,
@@ -28,6 +30,7 @@ test_loader = data_util.DataLoader(dataset=test_data,
 
 # net
 cnn = CNN()
+cnn = cnn.to(device)
 # loss
 loss_func = torch.nn.CrossEntropyLoss()
 
@@ -37,8 +40,8 @@ optimizer = torch.optim.Adam(cnn.parameters(), lr=0.01)
 # train
 for epoch in range(10):
     for i, (images, labels) in enumerate(train_loader):
-        images = images.cuda()
-        labels = labels.cuda()
+        images = images.to(device)
+        labels = labels.to(device)
         
         outputs = cnn(images)
         loss = loss_func(outputs, labels)
@@ -54,12 +57,12 @@ for epoch in range(10):
     loss_test = 0
     accuracy = 0
     for i, (images, labels) in enumerate(test_loader):
-        images = images.cuda()
-        labels = labels.cuda()
+        images = images.to(device)
+        labels = labels.to(device)
         
         outputs = cnn(images)
         loss_test += loss_func(outputs, labels)
-        _, pred = outputs.max()
+        _, pred = outputs.max(1)
         accuracy = (pred == labels).sum().item()
         
     accuracy = accuracy / len(test_data)
@@ -68,4 +71,4 @@ for epoch in range(10):
     print('epoch is {}, accuracy is {}, loss test is {}'.format(epoch + 1, accuracy, loss_test.item()))
     
     
-torch.save(cnn, 'model/model.pkl')
+torch.save(cnn, 'model.pkl')
